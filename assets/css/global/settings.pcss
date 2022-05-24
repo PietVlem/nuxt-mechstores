@@ -1,0 +1,48 @@
+/*
+ * Settings
+ *
+ * Project-wide re-usable variables
+ *
+ */
+/*
+-------------------------
+Rows
+-------------------------
+*/
+.row-nm { @apply max-w-constraint-nm mx-auto; }
+.row-lg { @apply max-w-constraint-lg mx-auto; }
+.row-xl { @apply max-w-constraint-xl mx-auto; }
+
+/*
+-------------------------
+transitions
+-------------------------
+*/
+.default-transition {
+    transition: 250ms ease-in-out;
+}
+
+/*
+-------------------------
+Global spacing
+-------------------------
+*/
+.gutter-wrapper {
+    @apply -mx-2;
+    @apply nm:-mx-4;
+}
+
+.gutter {
+    @apply px-2;
+    @apply nm:px-4;
+}
+
+.g-px {
+    @apply px-4;
+    @apply nm:px-12;
+}
+
+.g-mb {
+    @apply mb-16;
+    @apply nm:mb-24;
+}

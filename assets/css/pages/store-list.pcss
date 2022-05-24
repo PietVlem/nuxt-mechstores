@@ -1,0 +1,150 @@
+.store-list {
+    .filters-wrapper {
+        @apply mb-12;
+        @apply nm:flex nm:justify-between nm:items-center;
+        .store-filters {
+            @apply mb-4;
+            @apply md:flex gap-6;
+            @apply nm:mb-0;
+            &__region, &__product-types {
+                fieldset {
+                    @apply flex gap-4 flex-wrap;
+                    button {
+                        @apply tracking-wide uppercase px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray bg-transparent cursor-pointer transition duration-250 ease-in-out;
+                        &.region-north-america{
+                            &:hover { @apply border-cyan text-cyan; }
+                            &.active { @apply border-cyan bg-cyan; }
+                        }
+                        &.region-south-america {
+                            &:hover { @apply border-green text-green; }
+                            &.active { @apply border-green bg-green; }
+                        }
+                        &.region-europe {
+                            &:hover { @apply border-orange text-orange; }
+                            &.active { @apply border-orange bg-orange; }
+                        }
+                        &.region-asia {
+                            &:hover { @apply border-pink text-pink; }
+                            &.active { @apply border-pink bg-pink; }
+                        }
+                        &.region-oceania {
+                            &:hover { @apply border-purple text-purple; }
+                            &.active { @apply border-purple bg-purple; }
+                        }
+                        &.region-africa{
+                            &:hover { @apply border-red text-red; }
+                            &.active { @apply border-red bg-red; }
+                        }
+                        &.active:hover {
+                            @apply text-gray;
+                        }
+                    }
+                }
+            }
+            &__region {
+                @apply mdd:mb-4;
+            },
+            &__product-types {
+                button {
+                    &:hover { @apply border-yellow text-yellow; }
+                    &.active { @apply bg-yellow border-yellow; }
+                }
+            }
+        }
+        .search-from {
+            input[type="search"]{
+                @apply w-full;
+                @apply nm:w-auto;
+            }
+        }
+    }
+
+
+    .stores {
+        @apply grid gap-6 grid-cols-1 mb-8;
+        @apply md:grid-cols-2;
+        @apply nm:grid-cols-3;
+        @apply lg:grid-cols-4 mb-12;
+        @apply xl:grid-cols-5;
+
+        &__single {
+            &.europe {
+                .store-snippet {
+                    @apply border-2 border-orange;
+                    &__country { @apply bg-orange; }
+                }
+            }
+
+            &.asia {
+                .store-snippet {
+                    @apply border-2 border-pink;
+                    &__country { @apply bg-pink; }
+                }
+            }
+
+            &.oceania {
+                .store-snippet {
+                    @apply border-2 border-purple;
+                    &__country { @apply bg-purple; }
+                }
+            }
+
+            &.north-america {
+                .store-snippet {
+                    @apply border-2 border-cyan;
+                    &__country { @apply bg-cyan; }
+                }
+            }
+
+            &.south-america {
+                .store-snippet {
+                    @apply border-2 border-green;
+                    &__country { @apply bg-green; }
+                }
+            }
+
+            &.africa {
+                .store-snippet {
+                    @apply border-2 border-red;
+                    &__country { @apply bg-red; }
+                }
+            }
+
+            .store-snippet {
+                @apply rounded-br-lg rounded-tl-lg p-10 relative;
+
+                &__country {
+                    @apply absolute top-0 left-0 rounded-br-lg px-4 py-1 tracking-wide uppercase font-medium text-black text-xs;
+                }
+
+                &__image-wrapper {
+                    width: 80%;
+                    height: 50px;
+                    @apply m-auto flex justify-center items-center mb-10;
+                    img {
+                        max-width:100%;
+                        max-height:100%;
+                    }
+                }
+                &__title {
+                    @apply text-center;
+                }
+
+                &__products {
+                    @apply flex flex-wrap justify-center;
+                    span {
+                        @apply tracking-wide uppercase mx-2 px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray;
+                    }
+                }
+            }
+        }
+    }
+
+    .pagination {
+        @apply flex items-center justify-center;
+
+        &__pages {
+            @apply mx-4;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+header {
+    @apply shadow-xl;
+    .notification {
+        @apply block w-full bg-purple text-center py-4 text-black;
+        span { @apply underline; }
+    }
+    .nav-bar {
+        @apply py-4 justify-between items-center;
+        @apply md:flex;
+        &__buttons {
+            > .button {
+                &:not(:last-child){ @apply md:mr-4; }
+            }
+            .button {
+                @apply mdd:hidden;
+                @apply bg-cyan rounded text-black h-full px-4 py-2 transition duration-250 ease-in-out;
+                &:hover {
+                    @apply bg-orange;
+                }
+            }
+        }
+    }
+}

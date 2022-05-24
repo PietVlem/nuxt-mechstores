@@ -1,0 +1,53 @@
+/**
+ * components/typography.css
+ *
+ * Typography rules.
+ *
+ */
+
+body {
+    @apply font-sans text-white leading-normal;
+}
+
+/*
+Headings
+*/
+h1 {
+    @apply uppercase font-black text-3xl !important;
+}
+h2 {
+    @apply mb-2 uppercase font-bold text-xl !important;
+}
+h3 {
+    @apply mb-4 uppercase font-medium !important;
+}
+h4 {}
+h5 {}
+h6 {}
+
+/*
+Body text
+*/
+p {
+    &:not(:last-child) { @apply pb-4; }
+    +h2, h3 {
+        @apply pt-4;
+    }
+}
+
+/*
+Lists
+*/
+ul { list-style: disc; }
+
+ol { list-style: decimal; }
+
+ul, ol {
+    @apply pl-6;
+    &:not(:last-child) { @apply pb-4; }
+}
+
+/*
+Other
+*/
+a { @apply outline-none; }
