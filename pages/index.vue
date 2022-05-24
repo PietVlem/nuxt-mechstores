@@ -1,5 +1,6 @@
 <script setup>
-import axios from "axios";
+import axios from "axios"
+const config = useRuntimeConfig()
 
 /*Declaire vars*/
 const search = ref('')
@@ -14,7 +15,20 @@ const pagination = ref({
 const mechstores = ref([])
 const mechstoreRegions = ref([])
 const mechstoreProducts = ref([])
-const baseApiUrl = 'http://mindsweep-2022.test/api/v2/mechstores.json'
+const baseApiUrl = `${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`
+let timer = undefined
+
+watch(search, () => {
+  clearTimeout(timer)
+
+  timer = setTimeout(() => {
+    activeFilters.regions = []
+    activeFilters.products = []
+    search.value !== '' ? 
+      makeStoresApiCall(`${baseApiUrl}?search='${search.value}'`)
+      : makeStoresApiCall(`${baseApiUrl}`)
+  }, 750)
+})
 
 /*Methods*/
 function createParamsQueryString() {
@@ -33,7 +47,7 @@ function createParamsQueryString() {
   return decodeURIComponent(params.toString())
 }
 
-function makePostsApiCall(url) {
+function makeStoresApiCall(url) {
   console.log(url)
   axios({
     url: url,
@@ -41,6 +55,7 @@ function makePostsApiCall(url) {
   }).then(result => {
     if (result.status === 200 && result?.data?.mechstores) {
       mechstores.value = result.data.mechstores
+      pagination.value = result.data.meta.pagination;
     } else {
       console.error('Error loading posts', result)
     }
@@ -48,6 +63,7 @@ function makePostsApiCall(url) {
 }
 
 function toggleFilter(type, value) {
+  /*push filters into active filters array*/
   activeFilters[type].includes(value) ?
     activeFilters[type] = activeFilters.regions.filter(e => e !== value)
     : activeFilters[type].push(value)
@@ -55,27 +71,55 @@ function toggleFilter(type, value) {
   /*create paramstring from active filters for url*/
   const paramsQueryString = createParamsQueryString()
 
+  /*reset page*/
+  pagination.value.current_page = 1
+
   /*make api call*/
-  makePostsApiCall(`${baseApiUrl}?page=${pagination.current_page}&${paramsQueryString}`)
+  makeStoresApiCall(`${baseApiUrl}?page=${pagination.value.current_page}&${paramsQueryString}`)
 }
 
 function nextPage() {
+  if (pagination.value.current_page !== pagination.value.total_pages) {
+    /*change page param to next page*/
+    const nextpage = pagination.value.current_page + 1
 
+    /*create paramstring from active filters for url*/
+    const paramsQueryString = createParamsQueryString()
+
+    /*make api call*/
+    makeStoresApiCall(`${baseApiUrl}?page=${nextpage}&${paramsQueryString}`)
+
+    /*go back to the top of the page*/
+    window.scrollTo(0, 0);
+  }
 }
 
 function prevPage() {
-  
+  if (pagination.value.current_page > 1) {
+    /*change page param to next page*/
+    const nextpage = pagination.value.current_page - 1
+
+    /*create paramstring from active filters for url*/
+    const paramsQueryString = createParamsQueryString()
+
+    /*make api call*/
+    makeStoresApiCall(`${baseApiUrl}?page=${nextpage}&${paramsQueryString}`)
+
+    /*go back to the top of the page*/
+    window.scrollTo(0, 0);
+  }
 }
 
 const onMounted = async () => {
-  const mechstoreData = await axios.get('http://mindsweep-2022.test/api/v2/mechstores.json')
-  mechstores.value = mechstoreData.data.mechstores
-  pagination.value = mechstoreData.data.meta.pagination
+  /*get stores*/
+  makeStoresApiCall(`${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`)
 
-  const regions = await axios.get('https://www.mindsweep.online/api/v1/regions.json')
+  /*get regions*/
+  const regions = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/regions.json`)
   mechstoreRegions.value = regions.data.regions
 
-  const productTypes = await axios.get('https://www.mindsweep.online/api/v1/shopProducts.json');
+  /*get product types*/
+  const productTypes = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/shopProducts.json`);
   mechstoreProducts.value = productTypes.data.shopProducts;
 }
 
@@ -136,7 +180,7 @@ onMounted();
             </article>
           </a>
         </div>
-        <div class="pagination">
+        <div v-if="pagination.total_pages > 1" class="pagination">
           <button @click="prevPage">prev</button>
           <span class="pagination__pages">{{ pagination.current_page }}/{{ pagination.total_pages }}</span>
           <button @click="nextPage">next</button>
