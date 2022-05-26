@@ -18,19 +18,21 @@ const mechstoreProducts = ref([])
 const baseApiUrl = `${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`
 let timer = undefined
 
-watch(search, () => {
-  clearTimeout(timer)
-
-  timer = setTimeout(() => {
-    activeFilters.regions = []
-    activeFilters.products = []
-    search.value !== '' ? 
-      makeStoresApiCall(`${baseApiUrl}?search='${search.value}'`)
-      : makeStoresApiCall(`${baseApiUrl}`)
-  }, 750)
-})
-
 /*Methods*/
+function createQueryString(params) {
+  // Join params key-values into queryString
+  let queryString = "";
+  if (Object.keys(params).length !== 0) {
+    for (const [key, value] of Object.entries(params)) {
+      queryString = `${queryString}&${key}=${value}`;
+    }
+    // Replace leading '&' by '?' -> replace by default only replaces first occurrence
+    queryString = queryString.replace("&", "?");
+  }
+
+  return queryString;
+}
+
 function createParamsQueryString() {
   /*create paramstring from active filters for url*/
   /*example: mindsweep-2022.test/api/v2/mechstores.json?filters[region][]=1481*/
@@ -68,26 +70,40 @@ function toggleFilter(type, value) {
     activeFilters[type] = activeFilters.regions.filter(e => e !== value)
     : activeFilters[type].push(value)
 
-  /*create paramstring from active filters for url*/
-  const paramsQueryString = createParamsQueryString()
-
-  /*reset page*/
+  /*reset current page*/
   pagination.value.current_page = 1
 
+  /*create querystring*/
+  const queryString = createQueryString({
+    page: pagination.value.current_page
+  })
+
+  /*create paramstring from active filters*/
+  const paramsQueryString = createParamsQueryString()
+
+  /*Update url*/
+  const newUrl = `${location.pathname}?${paramsQueryString}`
+  history.replaceState({}, '', newUrl);
+
   /*make api call*/
-  makeStoresApiCall(`${baseApiUrl}?page=${pagination.value.current_page}&${paramsQueryString}`)
+  makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 }
 
 function nextPage() {
   if (pagination.value.current_page !== pagination.value.total_pages) {
     /*change page param to next page*/
-    const nextpage = pagination.value.current_page + 1
+    pagination.value.current_page += 1
+
+    /*create querystring*/
+    const queryString = createQueryString({
+      page: pagination.value.current_page
+    })
 
     /*create paramstring from active filters for url*/
     const paramsQueryString = createParamsQueryString()
 
     /*make api call*/
-    makeStoresApiCall(`${baseApiUrl}?page=${nextpage}&${paramsQueryString}`)
+    makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 
     /*go back to the top of the page*/
     window.scrollTo(0, 0);
@@ -97,23 +113,96 @@ function nextPage() {
 function prevPage() {
   if (pagination.value.current_page > 1) {
     /*change page param to next page*/
-    const nextpage = pagination.value.current_page - 1
+    pagination.value.current_page -= 1
+
+    /*create querystring*/
+    const queryString = createQueryString({
+      page: pagination.value.current_page
+    })
 
     /*create paramstring from active filters for url*/
     const paramsQueryString = createParamsQueryString()
 
     /*make api call*/
-    makeStoresApiCall(`${baseApiUrl}?page=${nextpage}&${paramsQueryString}`)
+    makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 
     /*go back to the top of the page*/
     window.scrollTo(0, 0);
   }
 }
 
-const onMounted = async () => {
-  /*get stores*/
-  makeStoresApiCall(`${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`)
+function searchStores() {
+  clearTimeout(timer)
 
+  timer = setTimeout(() => {
+    /*Reset filters*/
+    activeFilters.regions = []
+    activeFilters.products = []
+
+    /*create querystring from active filters*/
+    const queryString = createQueryString({
+      search: search.value
+    })
+
+    /*Update url*/
+    history.replaceState({}, '', `${location.pathname}${queryString}`);
+
+    /*Make api call*/
+    makeStoresApiCall(`${baseApiUrl}${queryString}`)
+  }, 750)
+}
+
+async function getPosts() {
+  const queryParams = window.location.search;
+  if (queryParams !== '') {
+    /*Set Url params from queryParams*/
+    let urlParams = new URLSearchParams(queryParams);
+
+    /*Get filter parameters*/
+    for (const [type, value] of urlParams) {
+      console.log(type, value)
+      switch (type) {
+        case 'search':
+          search.value = value
+          break
+        case 'page':
+          pagination.current_page = value
+          break
+        default:
+          if (!['page', 'search'].includes(type)) {
+            const filterType = type.substring(8, type.length - 3)
+            switch (filterType) {
+              case 'region':
+                activeFilters.regions.push(+value)
+                break
+              case 'shopProducts':
+                activeFilters.products.push(+value)
+                break
+              default:
+                console.log(`${filterType} not found`)
+            }
+          }
+          break
+      }
+    }
+
+    /*create querystring from active filters*/
+    const queryString = createQueryString({
+      search: search.value,
+      page: pagination.value.current_page
+    })
+
+    /*create paramstring from active filters*/
+    const paramsQueryString = createParamsQueryString()
+
+    /*make api call*/
+    await makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
+  } else {
+    makeStoresApiCall(baseApiUrl)
+  }
+}
+
+async function getFilters() {
   /*get regions*/
   const regions = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/regions.json`)
   mechstoreRegions.value = regions.data.regions
@@ -123,7 +212,11 @@ const onMounted = async () => {
   mechstoreProducts.value = productTypes.data.shopProducts;
 }
 
-onMounted();
+onMounted(async () => {
+  /*get data*/
+  getFilters()
+  getPosts()
+})
 </script>
 
 <template>
@@ -158,8 +251,8 @@ onMounted();
           <form class="search-from">
             <div data-filter-group>
               <label class="hidden" for="search-input"></label>
-              <input data-search-attribute="data-name" v-model="search" type="search" placeholder="search..."
-                id="search-input">
+              <input @input="searchStores()" data-search-attribute="data-name" v-model="search" type="search"
+                placeholder="search..." id="search-input">
             </div>
           </form>
         </div>
@@ -189,9 +282,3 @@ onMounted();
     </section>
   </div>
 </template>
-
-<style>
-.hide-block {
-  @apply hidden;
-}
-</style>
