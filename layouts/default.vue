@@ -1,6 +1,11 @@
 <script>
-useMeta({
-  title: 'Mechstores App',
+
+const route = useRoute()
+
+useHead({
+  title: `Mechstores App - ${route.meta.title}`,
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  charset: 'utf-8',
   meta: [
     { name: 'description', content: 'Overview of websites from all over the world where you can buy parts for your mechanical keyboard.' },
     { name: 'keywords', content: 'Mechanical Keyboard Stores App Filter' },

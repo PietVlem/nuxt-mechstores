@@ -1,3 +1,9 @@
+<script>
+definePageMeta({
+  title: 'Cookies'
+})
+</script>
+
 <template>
   <div class="g-px">
     <div class="row-nm">
@@ -12,20 +18,10 @@
         shopping cart, that you can shop safely and that the website continues to run smoothly. The cookies also ensure
         that we can see how our website is used and how we can improve it. Depending on your preferences, our own
         cookies may also be used to present you with targeted advertisements that match your personal interests.</p>
-      <h2>What kind of cookies do we use?</h2>
+      <h2>What kind of cookies does this website use?</h2>
       <h3>Performance cookies</h3>
       <p>These cookies are used to collect statistical information about the use of our website, also known as
         analytical cookies. We use this data for performance and website optimization.</p>
     </div>
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style scoped>
-
-</style>

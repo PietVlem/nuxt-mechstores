@@ -1,6 +1,11 @@
 <script setup>
+import splitbee from '@splitbee/web';
 import axios from "axios"
 const config = useRuntimeConfig()
+
+definePageMeta({
+  title: 'Stores'
+})
 
 /*Declaire vars*/
 const search = ref('')
@@ -20,17 +25,17 @@ let timer = undefined
 
 /*Methods*/
 function createQueryString(params) {
-  // Join params key-values into queryString
-  let queryString = "";
+  /*Join params key-values into queryString*/
+  let queryString = ""
   if (Object.keys(params).length !== 0) {
     for (const [key, value] of Object.entries(params)) {
-      queryString = `${queryString}&${key}=${value}`;
+      queryString = `${queryString}&${key}=${value}`
     }
-    // Replace leading '&' by '?' -> replace by default only replaces first occurrence
-    queryString = queryString.replace("&", "?");
+    /* Replace leading '&' by '?' -> replace by default only replaces first occurrence*/
+    queryString = queryString.replace("&", "?")
   }
 
-  return queryString;
+  return queryString
 }
 
 function createParamsQueryString() {
@@ -57,7 +62,7 @@ function makeStoresApiCall(url) {
   }).then(result => {
     if (result.status === 200 && result?.data?.mechstores) {
       mechstores.value = result.data.mechstores
-      pagination.value = result.data.meta.pagination;
+      pagination.value = result.data.meta.pagination
     } else {
       console.error('Error loading posts', result)
     }
@@ -83,7 +88,7 @@ function toggleFilter(type, value) {
 
   /*Update url*/
   const newUrl = `${location.pathname}?${paramsQueryString}`
-  history.replaceState({}, '', newUrl);
+  history.replaceState({}, '', newUrl)
 
   /*make api call*/
   makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
@@ -106,7 +111,7 @@ function nextPage() {
     makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 
     /*go back to the top of the page*/
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   }
 }
 
@@ -127,7 +132,7 @@ function prevPage() {
     makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 
     /*go back to the top of the page*/
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0)
   }
 }
 
@@ -145,7 +150,7 @@ function searchStores() {
     })
 
     /*Update url*/
-    history.replaceState({}, '', `${location.pathname}${queryString}`);
+    history.replaceState({}, '', `${location.pathname}${queryString}`)
 
     /*Make api call*/
     makeStoresApiCall(`${baseApiUrl}${queryString}`)
@@ -153,10 +158,10 @@ function searchStores() {
 }
 
 async function getPosts() {
-  const queryParams = window.location.search;
+  const queryParams = window.location.search
   if (queryParams !== '') {
     /*Set Url params from queryParams*/
-    let urlParams = new URLSearchParams(queryParams);
+    let urlParams = new URLSearchParams(queryParams)
 
     /*Get filter parameters*/
     for (const [type, value] of urlParams) {
@@ -169,18 +174,16 @@ async function getPosts() {
           pagination.current_page = value
           break
         default:
-          if (!['page', 'search'].includes(type)) {
-            const filterType = type.substring(8, type.length - 3)
-            switch (filterType) {
-              case 'region':
-                activeFilters.regions.push(+value)
-                break
-              case 'shopProducts':
-                activeFilters.products.push(+value)
-                break
-              default:
-                console.log(`${filterType} not found`)
-            }
+          const filterType = type.substring(8, type.length - 3)
+          switch (filterType) {
+            case 'region':
+              activeFilters.regions.push(+value)
+              break
+            case 'shopProducts':
+              activeFilters.products.push(+value)
+              break
+            default:
+              console.log(`${filterType} not found`)
           }
           break
       }
@@ -208,11 +211,13 @@ async function getFilters() {
   mechstoreRegions.value = regions.data.regions
 
   /*get product types*/
-  const productTypes = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/shopProducts.json`);
-  mechstoreProducts.value = productTypes.data.shopProducts;
+  const productTypes = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/shopProducts.json`)
+  mechstoreProducts.value = productTypes.data.shopProducts
 }
 
 onMounted(async () => {
+  /*init splitbee*/
+  splitbee.init()
   /*get data*/
   getFilters()
   getPosts()
@@ -262,7 +267,7 @@ onMounted(async () => {
             <article class="store-snippet">
               <span v-if="store.country" class="store-snippet__country">{{ store.country }}</span>
               <div class="store-snippet__image-wrapper">
-                <img :alt="`image for ${store.title}`" :src="store.logo">
+                <img v-if="store.logo" :alt="`image for ${store.title}`" :src="store.logo">
               </div>
               <h2 class="store-snippet__title">{{ store.title }}</h2>
               <div class="store-snippet__products">
