@@ -9,6 +9,7 @@ export default defineNuxtConfig({
         }
     },
     css: ["@/assets/css/styles.pcss"],
+    buildModules: ["@nuxtjs/svg"],
     build: {
         postcss: {
             postcssOptions: require("./postcss.config.js"),

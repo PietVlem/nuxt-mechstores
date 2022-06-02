@@ -1,5 +1,5 @@
 <script setup>
-import splitbee from '@splitbee/web';
+import splitbee from '@splitbee/web'
 import axios from "axios"
 const config = useRuntimeConfig()
 
@@ -55,7 +55,6 @@ function createParamsQueryString() {
 }
 
 function makeStoresApiCall(url) {
-  console.log(url)
   axios({
     url: url,
     method: 'get'
@@ -157,6 +156,12 @@ function searchStores() {
   }, 750)
 }
 
+function SplitbeeEvent(storeTitle) {
+  splitbee.track(`${storeTitle} clicked`, {
+    plan: "Store link followed"
+  })
+}
+
 async function getPosts() {
   const queryParams = window.location.search
   if (queryParams !== '') {
@@ -218,6 +223,7 @@ async function getFilters() {
 onMounted(async () => {
   /*init splitbee*/
   splitbee.init()
+
   /*get data*/
   getFilters()
   getPosts()
@@ -243,7 +249,7 @@ onMounted(async () => {
             </div>
             <div class="store-filters__product-types">
               <h3>Product type</h3>
-              <fieldset data-filter-group="product">
+              <fieldset>
                 <div class="form-group" v-for="(productType, index) in mechstoreProducts" :key="index">
                   <button @click.prevent="toggleFilter('products', productType.id)"
                     :class="[`product-type-${productType.slug}`, { 'active': activeFilters.products.includes(productType.id) }]">{{
@@ -255,15 +261,14 @@ onMounted(async () => {
           </form>
           <form class="search-from">
             <div data-filter-group>
-              <label class="hidden" for="search-input"></label>
-              <input @input="searchStores()" data-search-attribute="data-name" v-model="search" type="search"
+              <input @input="searchStores()" v-model="search" type="search"
                 placeholder="search..." id="search-input">
             </div>
           </form>
         </div>
         <div class="stores">
           <a v-for="store in mechstores" :key="store.id" :id="`store-${store.id}`" class="stores__single"
-            :class="store.region.slug" :href="store.url" target="_blank">
+            :class="store.region.slug" :href="store.url" target="_blank" @click="SplitbeeEvent(store.title)">
             <article class="store-snippet">
               <span v-if="store.country" class="store-snippet__country">{{ store.country }}</span>
               <div class="store-snippet__image-wrapper">
