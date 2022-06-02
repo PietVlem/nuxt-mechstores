@@ -1,8 +1,8 @@
 <template>
   <header class="g-mb">
     <section class="g-px">
-      <div class="nav-bar md:gutter-wrapper">
-        <a class="md:gutter" href="#">
+      <div class="nav-bar">
+        <a href="#">
           <h1 class="mdd:text-center">Mechstores App</h1>
         </a>
         <div class="nav-bar__buttons">

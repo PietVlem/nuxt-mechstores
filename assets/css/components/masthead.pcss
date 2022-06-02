@@ -1,13 +1,10 @@
 header {
     @apply shadow-xl;
     .nav-bar {
-        @apply py-4 justify-between items-center;
-        @apply md:flex;
+        @apply flex flex-col gap-4 py-4 justify-between items-center;
+        @apply md:flex-row;
         &__buttons {
-            @apply flex md:gap-4;
-            > .button {
-                &:not(:last-child){ @apply md:mr-4; }
-            }
+            @apply flex flex-wrap justify-center gap-4;
             .button {
                 @apply mdd:hidden;
                 @apply flex gap-2 bg-cyan rounded text-black h-full px-4 py-2 transition duration-250 ease-in-out;
