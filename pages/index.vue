@@ -69,10 +69,13 @@ function makeStoresApiCall(url) {
 }
 
 function toggleFilter(type, value) {
-  /*push filters into active filters array*/
-  activeFilters[type].includes(value) ?
-    activeFilters[type] = activeFilters.regions.filter(e => e !== value)
-    : activeFilters[type].push(value)
+  /*push the filter into the active filters array or remove them if the filter is active*/
+  if(activeFilters[type].includes(value)){
+    activeFilters[type] = activeFilters[type].filter(e => e !== value)
+  } else {
+    activeFilters[type].push(value)
+    splitbee.track(`Filtered on ${value}`, { plan: `${type} filter` })
+  }
 
   /*reset current page*/
   pagination.value.current_page = 1
@@ -106,6 +109,9 @@ function nextPage() {
     /*create paramstring from active filters for url*/
     const paramsQueryString = createParamsQueryString()
 
+    /*Update url*/
+    history.replaceState({}, '', `${location.pathname}${queryString}&${paramsQueryString}`)
+
     /*make api call*/
     makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
 
@@ -126,6 +132,9 @@ function prevPage() {
 
     /*create paramstring from active filters for url*/
     const paramsQueryString = createParamsQueryString()
+
+    /*Update url*/
+    history.replaceState({}, '', `${location.pathname}${queryString}&${paramsQueryString}`)
 
     /*make api call*/
     makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
@@ -157,9 +166,7 @@ function searchStores() {
 }
 
 function SplitbeeEvent(storeTitle) {
-  splitbee.track(`${storeTitle} clicked`, {
-    plan: "Store link followed"
-  })
+  splitbee.track(`${storeTitle} link clicked`, { plan: "Store link followed" })
 }
 
 async function getPosts() {
