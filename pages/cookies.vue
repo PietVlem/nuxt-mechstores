@@ -5,8 +5,8 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="g-px">
-    <div class="row-nm">
+  <div class="cookies row">
+    <div class="cookies__text rte">
       <h2>What are cookies?</h2>
       <p>Cookies and similar technologies are very small text documents or pieces of code that often contain a unique
         identifier. When you visit a website or use a mobile application, a computer asks your computer or mobile device
@@ -19,7 +19,7 @@ definePageMeta({
         that we can see how our website is used and how we can improve it. Depending on your preferences, our own
         cookies may also be used to present you with targeted advertisements that match your personal interests.</p>
       <h2>What kind of cookies does this website use?</h2>
-      <h3>Performance cookies</h3>
+      <h3>Performance cookies ( <a class="link" target="_blank" href="https://splitbee.io/">Splitbee</a> )</h3>
       <p>These cookies are used to collect statistical information about the use of our website, also known as
         analytical cookies. We use this data for performance and website optimization.</p>
     </div>

@@ -27,6 +27,11 @@ transitions
 Global spacing
 -------------------------
 */
+.row {
+    @apply grid grid-cols-mobile;
+    @apply nm:grid-cols-desktop;
+}
+
 .g-px {
     @apply px-4;
     @apply nm:px-12;

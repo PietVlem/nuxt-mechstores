@@ -28,12 +28,7 @@ h6 {}
 /*
 Body text
 */
-p {
-    &:not(:last-child) { @apply pb-4; }
-    +h2, h3 {
-        @apply pt-4;
-    }
-}
+
 
 /*
 Lists
@@ -50,4 +45,26 @@ ul, ol {
 /*
 Other
 */
-a { @apply outline-none; }
+a {
+    @apply outline-none;
+    &.link {
+        @apply outline-none text-purple transition duration-250 ease-in-out;
+        &:hover {
+            @apply text-cyan;
+        }
+    }
+}
+
+
+.rte {
+    h2 {
+        @apply text-purple;
+    }
+
+    p {
+        &:not(:last-child) { @apply pb-4; }
+        +h2, h3 {
+            @apply pt-4;
+        }
+    }
+}

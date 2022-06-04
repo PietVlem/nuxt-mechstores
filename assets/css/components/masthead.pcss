@@ -1,34 +1,22 @@
 header {
     @apply shadow-xl;
+    .notification {
+        @apply bg-pink text-black;
+        &__inner-wrapper {
+            @apply flex gap-8 justify-between items-center py-4;
+            a {
+                @apply text-white;
+            }
+            img {
+                @apply w-6 cursor-pointer;
+            }
+        }
+    }
     .nav-bar {
         @apply flex flex-col gap-4 py-4 justify-between items-center;
         @apply md:flex-row;
         &__buttons {
             @apply flex flex-wrap justify-center gap-4;
-            .button {
-                @apply mdd:hidden;
-                @apply flex gap-2 bg-cyan rounded text-black h-full px-4 py-2 transition duration-250 ease-in-out;
-                &:hover {
-                    @apply bg-orange;
-                }
-                img { 
-                    @apply h-6;
-                }
-                span {
-                    @apply block;
-                }
-            }
-            .button-wrapper {
-                button {
-                    @apply flex gap-2;
-                    img { 
-                        @apply h-6;
-                    }
-                    span {
-                        @apply block;
-                    }
-                }
-            }
         }
     }
 }

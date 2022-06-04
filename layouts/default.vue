@@ -24,6 +24,8 @@ useHead({
 
 <template>
   <Masthead></Masthead>
-  <slot />
+  <div class="content-slot">
+    <slot />
+  </div>
   <Footer></Footer>
 </template>

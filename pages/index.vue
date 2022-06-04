@@ -69,12 +69,15 @@ function makeStoresApiCall(url) {
 }
 
 function toggleFilter(type, value) {
+  /*Clear search input*/
+  search.value = ''
+
   /*push the filter into the active filters array or remove them if the filter is active*/
   if(activeFilters[type].includes(value)){
     activeFilters[type] = activeFilters[type].filter(e => e !== value)
   } else {
     activeFilters[type].push(value)
-    splitbee.track(`Filtered on ${value}`, { plan: `${type} filter` })
+    //splitbee.track(`Filtered on ${value}`, { plan: `${type}-filter` })
   }
 
   /*reset current page*/
@@ -242,7 +245,7 @@ onMounted(async () => {
     <section class="g-px">
       <div class="row-xl">
         <div class="filters-wrapper">
-          <form class="store-filters">
+          <div class="store-filters">
             <div class="store-filters__region">
               <h3>Region</h3>
               <fieldset>
@@ -265,9 +268,9 @@ onMounted(async () => {
                 </div>
               </fieldset>
             </div>
-          </form>
+          </div>
           <form class="search-from">
-            <div data-filter-group>
+            <div>
               <input @input="searchStores()" v-model="search" type="search"
                 placeholder="search..." id="search-input">
             </div>
@@ -291,9 +294,13 @@ onMounted(async () => {
           </a>
         </div>
         <div v-if="pagination.total_pages > 1" class="pagination">
-          <button @click="prevPage">prev</button>
+          <a class="pagination__button pagination__button--prev-page" href="#" @click.prevent="prevPage">
+            <img src="~assets/svg/icon-arrow-left.svg" alt="previous page"/>
+          </a>
           <span class="pagination__pages">{{ pagination.current_page }}/{{ pagination.total_pages }}</span>
-          <button @click="nextPage">next</button>
+          <a class="pagination__button pagination__button--next-page" href="#" @click.prevent="nextPage">
+            <img src="~assets/svg/icon-arrow-right.svg" alt="next page"/>
+          </a>
         </div>
       </div>
     </section>

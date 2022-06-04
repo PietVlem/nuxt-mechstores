@@ -1,11 +1,10 @@
 .store-list {
     .filters-wrapper {
-        @apply mb-12;
-        @apply nm:flex nm:justify-between nm:items-center;
+        @apply mb-12 grid grid-cols-12 gap-y-4;
         .store-filters {
-            @apply mb-4;
-            @apply md:flex gap-6;
-            @apply nm:mb-0;
+            @apply mb-4 col-span-12 col-start-1 flex flex-col gap-6;
+            @apply md:flex-row;
+            @apply nm:mb-0 nm:col-span-8;
             &__region, &__product-types {
                 fieldset {
                     @apply flex gap-4 flex-wrap;
@@ -52,9 +51,10 @@
             }
         }
         .search-from {
-            input[type="search"]{
+            @apply flex items-center col-span-12 col-start-1;
+            @apply nm:col-span-3 nm:col-start-10;
+            div, input[type="search"]{
                 @apply w-full;
-                @apply nm:w-auto;
             }
         }
     }
@@ -143,8 +143,15 @@
     .pagination {
         @apply flex items-center justify-center;
 
-        &__pages {
-            @apply mx-4;
+        &__button {
+            @apply block w-16 transform translate-x-0 transition-transform py-2 px-4;
+
+            &--next-page:hover {
+                @apply transform translate-x-1;
+            }
+            &--prev-page:hover{
+                @apply transform -translate-x-1;
+            }
         }
     }
 }
