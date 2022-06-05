@@ -20,25 +20,27 @@ onMounted(() => {
     <div v-if="showStatusBar" class="notification">
       <div class="notification__inner-wrapper g-px">
         <span>
-          Are you a representative of one of these stores? <a class="link" href="/lets-work-together">Lets work together! 🤝</a>
+          Are you a representative of one of these stores? 
+          <NuxtLink to="/lets-work-together">Lets work together! 🤝</NuxtLink>
         </span>
+        
         <img @click="closeStatusBar" src="~assets/svg/icon-x.svg" />
       </div>
     </div>
     <section class="g-px">
       <div class="nav-bar">
-        <a href="/">
-          <h1 class="mdd:text-center">Mechstores App</h1>
-        </a>
+        <NuxtLink to="/">
+           <h1 class="mdd:text-center">Mechstores App</h1>
+        </NuxtLink>
         <div class="nav-bar__buttons">
-          <a class="button" href="mailto:info@mindsweep.online">
+          <NuxtLink class="button" to="mailto:info@mindsweep.online">
             <img src="~assets/svg/icon-send.svg" />
             <span>Give me feedback</span>
-          </a>
-          <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=SSVPDTR2E8U22" target="_blank">
+          </NuxtLink>
+          <NuxtLink class="button" to="https://www.paypal.com/donate/?hosted_button_id=SSVPDTR2E8U22" target="_blank">
             <img src="~assets/svg/icon-unicorn.svg" />
             <span>Unicorn fund</span>
-          </a>
+          </NuxtLink>
         </div>
       </div>
     </section>

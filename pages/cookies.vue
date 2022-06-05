@@ -20,7 +20,7 @@ definePageMeta({
         that we can see how our website is used and how we can improve it. Depending on your preferences, our own
         cookies may also be used to present you with targeted advertisements that match your personal interests.</p>
       <h2>What kind of cookies does this website use?</h2>
-      <h3>Performance cookies ( <a class="link" target="_blank" href="https://splitbee.io/">Splitbee</a> )</h3>
+      <h3>Performance cookies ( <NuxtLink to="https://splitbee.io/" target="_blank">Splitbee</NuxtLink> )</h3>
       <p>These cookies are used to collect statistical information about the use of our website, also known as
         analytical cookies. We use this data for performance and website optimization.</p>
     </div>
