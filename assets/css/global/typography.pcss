@@ -57,11 +57,23 @@ a {
 
 
 .rte {
+    h1 {
+        @apply mb-4;
+    }
+
     h2 {
         @apply text-purple;
     }
 
+    a {
+        @apply outline-none text-purple transition duration-250 ease-in-out;
+        &:hover {
+            @apply text-cyan;
+        }
+    }
+
     p {
+        @apply leading-relaxed;
         &:not(:last-child) { @apply pb-4; }
         +h2, h3 {
             @apply pt-4;

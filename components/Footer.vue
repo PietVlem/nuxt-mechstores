@@ -7,8 +7,8 @@ year.value = new Date().getFullYear()
   <footer class="g-px">
     <div class="credits row-xl">
       <div class="credits__pages">
-        <a class="link" href="#">Cookies</a>
-        <!--<router-link :to="{name: 'SupportMe'}">Support me</router-link>-->
+        <a class="link" href="/cookies">Cookies</a>
+        <a class="link" href="/lets-work-together">Let's work together</a>
       </div>
       <div class="credits__copy">
         <span>© Copyright {{ year }}, <a class="link" href="https://mindsweep.online/">mindsweep.online</a></span>

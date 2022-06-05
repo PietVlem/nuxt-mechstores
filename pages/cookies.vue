@@ -5,8 +5,9 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="cookies row">
+  <div class="cookies row g-mb">
     <div class="cookies__text rte">
+      <h1>Cookies</h1>
       <h2>What are cookies?</h2>
       <p>Cookies and similar technologies are very small text documents or pieces of code that often contain a unique
         identifier. When you visit a website or use a mobile application, a computer asks your computer or mobile device

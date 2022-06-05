@@ -28,4 +28,5 @@ useHead({
     <slot />
   </div>
   <Footer></Footer>
+  <CookiesPopup/>
 </template>

@@ -20,14 +20,14 @@ onMounted(() => {
     <div v-if="showStatusBar" class="notification">
       <div class="notification__inner-wrapper g-px">
         <span>
-          Are you a representative of one of these stores? <a class="link" href="#">Lets work together! 🤝</a>
+          Are you a representative of one of these stores? <a class="link" href="/lets-work-together">Lets work together! 🤝</a>
         </span>
         <img @click="closeStatusBar" src="~assets/svg/icon-x.svg" />
       </div>
     </div>
     <section class="g-px">
       <div class="nav-bar">
-        <a href="#">
+        <a href="/">
           <h1 class="mdd:text-center">Mechstores App</h1>
         </a>
         <div class="nav-bar__buttons">
