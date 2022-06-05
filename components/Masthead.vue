@@ -1,23 +1,16 @@
 <script setup>
-import { useCookies } from "vue3-cookies"
-const { cookies } = useCookies();
+const hidenotifaction = useCookie('statusbar');
+hidenotifaction.value = hidenotifaction.value || false
 
-/*Satus bar*/
-const showStatusBar = ref(true)
 function closeStatusBar() {
-  cookies.set(`status`, 'hidden', '7d')
-  showStatusBar.value = false
+  hidenotifaction.value = true
 }
 
-onMounted(() => {
-  let my_cookie_value = cookies.get("status");
-  if (my_cookie_value) showStatusBar.value = false
-})
 </script>
 
 <template>
   <header class="g-mb">
-    <div v-if="showStatusBar" class="notification">
+    <div v-if="!hidenotifaction" class="notification">
       <div class="notification__inner-wrapper g-px">
         <span>
           Are you a representative of one of these stores? 

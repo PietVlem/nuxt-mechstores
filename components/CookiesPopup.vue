@@ -1,25 +1,18 @@
 <script setup>
-import { useCookies } from "vue3-cookies"
-const { cookies } = useCookies();
+const hidePopupCookie = useCookie('cookie-popup');
+hidePopupCookie.value = hidePopupCookie.value || false
 
-/*Satus bar*/
-const showPopup = ref(true)
 function hidePopup() {
-  cookies.set(`cookie-popup`, 'hidden', '7d')
-  showPopup.value = false
+  hidePopupCookie.value = true
 }
-
-onMounted(() => {
-  let my_cookie_value = cookies.get("cookie-popup");
-  if (my_cookie_value) showPopup.value = false
-})
 </script>
 
 <template>
- <div v-if="showPopup" class="cookies-popup">
+ <div v-if="!hidePopupCookie" class="cookies-popup">
     <div class="cookies-popup__inner-wrapper">
       <p>
-          This site uses <NuxtLink class="link" to="/cookies">cookies</NuxtLink>
+          This site uses 
+          <NuxtLink class="link" to="/cookies">cookies</NuxtLink>
       </p>
       <img @click="hidePopup" src="~assets/svg/icon-x.svg" />
     </div>
