@@ -11,7 +11,8 @@ definePageMeta({
 const search = ref('')
 const activeFilters = reactive({
   regions: [],
-  products: []
+  products: [],
+  countries: []
 })
 const pagination = ref({
   total_pages: 1,
@@ -21,6 +22,7 @@ const activeDropDown = ref('null')
 const mechstores = ref([])
 const mechstoreRegions = ref([])
 const mechstoreProducts = ref([])
+const mechstoreCountries = ref([])
 const baseApiUrl = `${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`
 let timer = undefined
 
@@ -74,12 +76,9 @@ function toggleFilter(type, value) {
   search.value = ''
 
   /*push the filter into the active filters array or remove them if the filter is active*/
-  if (activeFilters[type].includes(value)) {
+  activeFilters[type].includes(value) ?
     activeFilters[type] = activeFilters[type].filter(e => e !== value)
-  } else {
-    activeFilters[type].push(value)
-    //splitbee.track(`Filtered on ${value}`, { plan: `${type}-filter` })
-  }
+    : activeFilters[type].push(value)
 
   /*close dropdown*/
   activeDropDown.value = null
@@ -241,6 +240,13 @@ async function getFilters() {
   /*get product types*/
   const productTypes = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v1/shopProducts.json`)
   mechstoreProducts.value = productTypes.data.shopProducts
+
+  /*get countries*/
+  const countries = await axios.get(`${config.MINDSWEEP_API_BASEURL}/api/v2/countries.json`)
+  const countriesObj = countries.data.countries
+  for (const key in countriesObj) {
+    mechstoreCountries.value.push(countriesObj[key])
+  }
 }
 
 onMounted(async () => {
@@ -257,37 +263,6 @@ onMounted(async () => {
   <div class="store-list g-mb">
     <section class="g-px">
       <div class="row-xl">
-        <!-- <div class="filters-wrapper">
-          <div class="store-filters">
-            <div class="store-filters__region">
-              <h3>Region</h3>
-              <fieldset>
-                <div class="form-group" v-for="(region, index) in mechstoreRegions" :key="index">
-                  <button @click.prevent="toggleFilter('regions', region.id)"
-                    :class="[`region-${region.slug}`, { 'active': activeFilters.regions.includes(region.id) }]">{{
-                        region.title
-                    }}</button>
-                </div>
-              </fieldset>
-            </div>
-            <div class="store-filters__product-types">
-              <h3>Product type</h3>
-              <fieldset>
-                <div class="form-group" v-for="(productType, index) in mechstoreProducts" :key="index">
-                  <button @click.prevent="toggleFilter('products', productType.id)"
-                    :class="[`product-type-${productType.slug}`, { 'active': activeFilters.products.includes(productType.id) }]">{{
-                        productType.title
-                    }}</button>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-          <form class="search-from">
-            <div>
-              <input @input="searchStores()" v-model="search" type="search" placeholder="search..." id="search-input">
-            </div>
-          </form>
-        </div> -->
         <div class="stores-filters">
           <div class="stores-filters__dropdowns">
             <div class="dropdown">
@@ -314,6 +289,18 @@ onMounted(async () => {
                   }}</button>
               </div>
             </div>
+            <div class="dropdown">
+              <button @click.prevent="toggleDropdown('countries')" class="dropdown__button">
+                Country
+                <img src="~assets/svg/icon-chevron-down.svg" />
+              </button>
+              <div v-show="activeDropDown === 'countries'" class="dropdown__content">
+                <button class="option" v-for="(country, index) in mechstoreCountries" :key="index"
+                  @click.prevent="toggleFilter('countries', country)">{{
+                      country
+                  }}</button>
+              </div>
+            </div>
           </div>
           <form class="search-from">
             <div>
@@ -321,7 +308,8 @@ onMounted(async () => {
             </div>
           </form>
         </div>
-        <div v-if="activeFilters.regions.length || activeFilters.products.length" class="active-filters">
+        <div v-if="activeFilters.regions.length || activeFilters.products.length || activeFilters.countries.length"
+          class="active-filters">
           <button class="tag" v-for="activeRegionId in activeFilters.regions" :key="activeRegionId"
             @click="toggleFilter('regions', activeRegionId)"
             :class="`tag--${mechstoreRegions.find(region => region.id === activeRegionId).slug}`">
@@ -331,6 +319,11 @@ onMounted(async () => {
           <button class="tag" v-for="activeProductId in activeFilters.products" :key="activeProductId"
             @click="toggleFilter('products', activeProductId)">
             {{ mechstoreProducts.find(product => product.id === activeProductId).title }}
+            <img src="~assets/svg/icon-x.svg" />
+          </button>
+          <button class="tag" v-for="(country, index) in activeFilters.countries" :key="index"
+            @click="toggleFilter('countries', country)">
+            {{ country }}
             <img src="~assets/svg/icon-x.svg" />
           </button>
         </div>
