@@ -22,3 +22,27 @@
 @import "./pages/cookies.pcss";
 @import "./pages/lets-work-together.pcss";
 @import "./pages/support.pcss";
+
+/**
+ * Include settings via @layer.
+ *
+ */
+
+ @layer components {
+    /* Default Transitions */
+    .dt-colors {
+        @apply transition-colors duration-200;
+    }
+
+    .dt-opacity {
+        @apply transition-opacity duration-200;
+    }
+
+    .dt-transform {
+        @apply transition-transform duration-200;
+    }
+
+    .dt-all {
+        @apply transition-all duration-200;
+    }
+}

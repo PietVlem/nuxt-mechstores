@@ -1,60 +1,111 @@
 .store-list {
-    .filters-wrapper {
-        @apply mb-12 grid grid-cols-12 gap-y-4;
-        .store-filters {
-            @apply mb-4 col-span-12 col-start-1 flex flex-col gap-6;
-            @apply md:flex-row;
-            @apply nm:mb-0 nm:col-span-8;
-            &__region, &__product-types {
-                fieldset {
-                    @apply flex gap-4 flex-wrap;
-                    button {
-                        @apply tracking-wide uppercase px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray bg-transparent cursor-pointer transition duration-250 ease-in-out;
-                        &.region-north-america{
-                            &:hover { @apply border-cyan text-cyan; }
-                            &.active { @apply border-cyan bg-cyan; }
+    .stores-filters {
+        @apply flex gap-6 flex-wrap justify-between mb-12;
+
+        &__dropdowns {
+            @apply w-full flex flex-wrap items-center gap-6;
+            @apply md:w-auto;
+
+            .dropdown {
+                @apply relative w-full; 
+                @apply sm:w-[calc(50%-0.75rem)];
+                @apply md:w-auto;
+    
+                &__button {
+                    @apply w-full flex justify-between gap-4 items-center px-6 py-3 bg-gray rounded-md text-white;
+                    @apply md:w-auto;
+                }
+    
+                &__content {
+                    @apply mt-2 rounded-md bg-gray overflow-hidden;
+                    @apply sm:absolute sm:z-10 sm:top-16 sm:mt-0; 
+    
+                    .option {
+                        @apply w-full text-left bg-transparent rounded-none text-yellow dt-colors;
+
+                        &:hover {
+                            @apply bg-yellow text-gray;
                         }
-                        &.region-south-america {
-                            &:hover { @apply border-green text-green; }
-                            &.active { @apply border-green bg-green; }
+
+                        &--north-america{
+                            @apply text-cyan;
+                            &:hover {
+                                @apply bg-cyan;
+                            }
                         }
-                        &.region-europe {
-                            &:hover { @apply border-orange text-orange; }
-                            &.active { @apply border-orange bg-orange; }
+                        &--south-america {
+                            @apply text-green;
+                            &:hover {
+                                @apply bg-green;
+                            }
                         }
-                        &.region-asia {
-                            &:hover { @apply border-pink text-pink; }
-                            &.active { @apply border-pink bg-pink; }
+                        &--europe {
+                            @apply text-orange;
+                            &:hover {
+                                @apply bg-orange;
+                            }
                         }
-                        &.region-oceania {
-                            &:hover { @apply border-purple text-purple; }
-                            &.active { @apply border-purple bg-purple; }
+                        &--asia {
+                            @apply text-pink;
+                            &:hover {
+                                @apply bg-pink;
+                            }
                         }
-                        &.region-africa{
-                            &:hover { @apply border-red text-red; }
-                            &.active { @apply border-red bg-red; }
+                        &--oceania {
+                            @apply text-purple;
+                            &:hover {
+                                @apply bg-purple;
+                            }
                         }
-                        &.active:hover {
-                            @apply text-gray;
+                        &--africa{
+                            @apply text-red;
+                            &:hover {
+                                @apply bg-red;
+                            }
                         }
+
+                        
                     }
                 }
             }
-            &__region {
-                @apply mdd:mb-4;
-            },
-            &__product-types {
-                button {
-                    &:hover { @apply border-yellow text-yellow; }
-                    &.active { @apply bg-yellow border-yellow; }
-                }
-            }
         }
+
         .search-from {
-            @apply flex items-center col-span-12 col-start-1;
-            @apply nm:col-span-3 nm:col-start-10;
+            @apply flex;
+            @apply mdd:w-full;
             div, input[type="search"]{
                 @apply w-full;
+            }
+        }
+    }
+
+    .active-filters {
+        @apply mb-12 flex gap-4;
+
+        .tag {
+            @apply flex gap-2 items-center uppercase text-xs font-medium bg-yellow rounded-md px-4 py-2 text-gray cursor-pointer;
+
+            img {
+                @apply h-4;
+            }
+
+            &--north-america{
+                @apply bg-cyan;
+            }
+            &--south-america {
+                @apply bg-green;
+            }
+            &--europe {
+                @apply bg-orange;
+            }
+            &--asia {
+                @apply bg-pink;
+            }
+            &--oceania {
+                @apply bg-purple;
+            }
+            &--africa{
+                @apply bg-red;
             }
         }
     }

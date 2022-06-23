@@ -17,6 +17,7 @@ const pagination = ref({
   total_pages: 1,
   current_page: 1
 })
+const activeDropDown = ref('null')
 const mechstores = ref([])
 const mechstoreRegions = ref([])
 const mechstoreProducts = ref([])
@@ -73,12 +74,15 @@ function toggleFilter(type, value) {
   search.value = ''
 
   /*push the filter into the active filters array or remove them if the filter is active*/
-  if(activeFilters[type].includes(value)){
+  if (activeFilters[type].includes(value)) {
     activeFilters[type] = activeFilters[type].filter(e => e !== value)
   } else {
     activeFilters[type].push(value)
     //splitbee.track(`Filtered on ${value}`, { plan: `${type}-filter` })
   }
+
+  /*close dropdown*/
+  activeDropDown.value = null
 
   /*reset current page*/
   pagination.value.current_page = 1
@@ -161,7 +165,8 @@ function searchStores() {
     })
 
     /*Update url*/
-    history.replaceState({}, '', `${location.pathname}${queryString}`)
+    const updatedUrl = search.value ? location.pathname + queryString : location.pathname
+    history.replaceState({}, '', updatedUrl)
 
     /*Make api call*/
     makeStoresApiCall(`${baseApiUrl}${queryString}`)
@@ -170,6 +175,14 @@ function searchStores() {
 
 function SplitbeeEvent(storeTitle) {
   splitbee.track(`${storeTitle} link clicked`, { plan: "Store link followed" })
+}
+
+function toggleDropdown(dropdown) {
+  if (activeDropDown.value) {
+    activeDropDown.value !== dropdown ? activeDropDown.value = dropdown : activeDropDown.value = null
+  } else {
+    activeDropDown.value = dropdown
+  }
 }
 
 async function getPosts() {
@@ -244,7 +257,7 @@ onMounted(async () => {
   <div class="store-list g-mb">
     <section class="g-px">
       <div class="row-xl">
-        <div class="filters-wrapper">
+        <!-- <div class="filters-wrapper">
           <div class="store-filters">
             <div class="store-filters__region">
               <h3>Region</h3>
@@ -271,10 +284,55 @@ onMounted(async () => {
           </div>
           <form class="search-from">
             <div>
-              <input @input="searchStores()" v-model="search" type="search"
-                placeholder="search..." id="search-input">
+              <input @input="searchStores()" v-model="search" type="search" placeholder="search..." id="search-input">
             </div>
           </form>
+        </div> -->
+        <div class="stores-filters">
+          <div class="stores-filters__dropdowns">
+            <div class="dropdown">
+              <button @click.prevent="toggleDropdown('regions')" class="dropdown__button">
+                Region
+                <img src="~assets/svg/icon-chevron-down.svg" />
+              </button>
+              <div v-show="activeDropDown === 'regions'" class="dropdown__content">
+                <button class="option" v-for="(region, index) in mechstoreRegions" :key="index"
+                  @click.prevent="toggleFilter('regions', region.id)" :class="`option--${region.slug}`">
+                  {{ region.title }}
+                </button>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button @click.prevent="toggleDropdown('products')" class="dropdown__button">
+                Product type
+                <img src="~assets/svg/icon-chevron-down.svg" />
+              </button>
+              <div v-show="activeDropDown === 'products'" class="dropdown__content">
+                <button class="option" v-for="(product, index) in mechstoreProducts" :key="index"
+                  @click.prevent="toggleFilter('products', product.id)">{{
+                      product.title
+                  }}</button>
+              </div>
+            </div>
+          </div>
+          <form class="search-from">
+            <div>
+              <input @input="searchStores()" v-model="search" type="search" placeholder="search..." id="search-input">
+            </div>
+          </form>
+        </div>
+        <div v-if="activeFilters.regions.length || activeFilters.products.length" class="active-filters">
+          <button class="tag" v-for="activeRegionId in activeFilters.regions" :key="activeRegionId"
+            @click="toggleFilter('regions', activeRegionId)"
+            :class="`tag--${mechstoreRegions.find(region => region.id === activeRegionId).slug}`">
+            {{ mechstoreRegions.find(region => region.id === activeRegionId).title }}
+            <img src="~assets/svg/icon-x.svg" />
+          </button>
+          <button class="tag" v-for="activeProductId in activeFilters.products" :key="activeProductId"
+            @click="toggleFilter('products', activeProductId)">
+            {{ mechstoreProducts.find(product => product.id === activeProductId).title }}
+            <img src="~assets/svg/icon-x.svg" />
+          </button>
         </div>
         <div class="stores">
           <a v-for="store in mechstores" :key="store.id" :id="`store-${store.id}`" class="stores__single"
@@ -295,11 +353,11 @@ onMounted(async () => {
         </div>
         <div v-if="pagination.total_pages > 1" class="pagination">
           <a class="pagination__button pagination__button--prev-page" href="#" @click.prevent="prevPage">
-            <img src="~assets/svg/icon-arrow-left.svg" alt="previous page"/>
+            <img src="~assets/svg/icon-arrow-left.svg" alt="previous page" />
           </a>
           <span class="pagination__pages">{{ pagination.current_page }}/{{ pagination.total_pages }}</span>
           <a class="pagination__button pagination__button--next-page" href="#" @click.prevent="nextPage">
-            <img src="~assets/svg/icon-arrow-right.svg" alt="next page"/>
+            <img src="~assets/svg/icon-arrow-right.svg" alt="next page" />
           </a>
         </div>
       </div>
