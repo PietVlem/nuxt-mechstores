@@ -23,8 +23,13 @@ const mechstores = ref([])
 const mechstoreRegions = ref([])
 const mechstoreProducts = ref([])
 const mechstoreCountries = ref([])
+const countrySearch = ref('')
 const baseApiUrl = `${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`
 let timer = undefined
+
+const mechstoreCountriesFiltered = computed(() => {
+  return mechstoreCountries.value.filter(country => country.toLowerCase().includes(countrySearch.value.toLowerCase()))
+})
 
 /*Methods*/
 function createQueryString(params) {
@@ -75,10 +80,17 @@ function toggleFilter(type, value) {
   /*Clear search input*/
   search.value = ''
 
+  /*Clear countries if filtering for reagions and the other way around*/
+  if(type === 'countries') activeFilters.regions = []
+  if(type === 'regions')  activeFilters.countries = []
+
   /*push the filter into the active filters array or remove them if the filter is active*/
   activeFilters[type].includes(value) ?
     activeFilters[type] = activeFilters[type].filter(e => e !== value)
     : activeFilters[type].push(value)
+
+  /*Only allow 1 country to be filtered on*/
+  if(activeFilters.countries.length > 1) activeFilters.countries.shift()
 
   /*close dropdown*/
   activeDropDown.value = null
@@ -88,14 +100,15 @@ function toggleFilter(type, value) {
 
   /*create querystring*/
   const queryString = createQueryString({
-    page: pagination.value.current_page
+    page: pagination.value.current_page,
+    country: activeFilters.countries[0] ?? ''
   })
 
   /*create paramstring from active filters*/
   const paramsQueryString = createParamsQueryString()
 
   /*Update url*/
-  const newUrl = `${location.pathname}?${paramsQueryString}`
+  const newUrl = `${location.pathname}${queryString}&${paramsQueryString}`
   history.replaceState({}, '', newUrl)
 
   /*make api call*/
@@ -200,6 +213,9 @@ async function getPosts() {
         case 'page':
           pagination.current_page = value
           break
+        case 'country':
+          if(value !== '') activeFilters.countries.push(value)
+          break
         default:
           const filterType = type.substring(8, type.length - 3)
           switch (filterType) {
@@ -219,7 +235,8 @@ async function getPosts() {
     /*create querystring from active filters*/
     const queryString = createQueryString({
       search: search.value,
-      page: pagination.value.current_page
+      page: pagination.value.current_page,
+      country: activeFilters.countries[0] ?? ''
     })
 
     /*create paramstring from active filters*/
@@ -289,13 +306,16 @@ onMounted(async () => {
                   }}</button>
               </div>
             </div>
-            <div class="dropdown">
+            <div class="dropdown dropdown--countries">
               <button @click.prevent="toggleDropdown('countries')" class="dropdown__button">
                 Country
                 <img src="~assets/svg/icon-chevron-down.svg" />
               </button>
               <div v-show="activeDropDown === 'countries'" class="dropdown__content">
-                <button class="option" v-for="(country, index) in mechstoreCountries" :key="index"
+                <form>
+                  <input placeholder="search..." type="search" v-model="countrySearch"/>
+                </form>
+                <button class="option" v-for="(country, index) in mechstoreCountriesFiltered" :key="index"
                   @click.prevent="toggleFilter('countries', country)">{{
                       country
                   }}</button>
