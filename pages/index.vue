@@ -172,6 +172,7 @@ function searchStores() {
     /*Reset filters*/
     activeFilters.regions = []
     activeFilters.products = []
+    activeFilters.countries = []
 
     /*create querystring from active filters*/
     const queryString = createQueryString({
