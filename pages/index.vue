@@ -1,6 +1,7 @@
 <script setup>
 import splitbee from '@splitbee/web'
 import axios from "axios"
+import Card from "../components/Card.vue"
 const config = useRuntimeConfig()
 
 definePageMeta({
@@ -79,10 +80,11 @@ function makeStoresApiCall(url) {
 function toggleFilter(type, value) {
   /*Clear search input*/
   search.value = ''
+  countrySearch.value = ''
 
   /*Clear countries if filtering for reagions and the other way around*/
-  if(type === 'countries') activeFilters.regions = []
-  if(type === 'regions')  activeFilters.countries = []
+  if (type === 'countries') activeFilters.regions = []
+  if (type === 'regions') activeFilters.countries = []
 
   /*push the filter into the active filters array or remove them if the filter is active*/
   activeFilters[type].includes(value) ?
@@ -90,7 +92,7 @@ function toggleFilter(type, value) {
     : activeFilters[type].push(value)
 
   /*Only allow 1 country to be filtered on*/
-  if(activeFilters.countries.length > 1) activeFilters.countries.shift()
+  if (activeFilters.countries.length > 1) activeFilters.countries.shift()
 
   /*close dropdown*/
   activeDropDown.value = null
@@ -217,7 +219,7 @@ async function getPosts() {
           pagination.current_page = value
           break
         case 'country':
-          if(value !== '') activeFilters.countries.push(value)
+          if (value !== '') activeFilters.countries.push(value)
           break
         default:
           const filterType = type.substring(8, type.length - 3)
@@ -316,7 +318,7 @@ onMounted(async () => {
               </button>
               <div v-show="activeDropDown === 'countries'" class="dropdown__content">
                 <form>
-                  <input placeholder="search..." type="search" v-model="countrySearch"/>
+                  <input placeholder="search..." type="search" v-model="countrySearch" />
                 </form>
                 <button class="option" v-for="(country, index) in mechstoreCountriesFiltered" :key="index"
                   @click.prevent="toggleFilter('countries', country)">{{
@@ -350,23 +352,11 @@ onMounted(async () => {
             <img src="~assets/svg/icon-x.svg" />
           </button>
         </div>
-        <div class="stores">
-          <a v-for="store in mechstores" :key="store.id" :id="`store-${store.id}`" class="stores__single"
-            :class="store.region.slug" :href="store.url" target="_blank" @click="SplitbeeEvent(store.title)">
-            <article class="store-snippet">
-              <span v-if="store.country" class="store-snippet__country">{{ store.country }}</span>
-              <div class="store-snippet__image-wrapper">
-                <img v-if="store.logo" :alt="`image for ${store.title}`" :src="store.logo">
-              </div>
-              <h2 class="store-snippet__title">{{ store.title }}</h2>
-              <div class="store-snippet__products">
-                <span v-for="(product, index) in store.shopProducts" :key="index">
-                  {{ product.title }}
-                </span>
-              </div>
-            </article>
-          </a>
+        <div v-if="mechstores.length" class="stores">
+          <Card v-for="store in mechstores" :key="store.id" @click="SplitbeeEvent(store.title)"
+            :store="store" />
         </div>
+        <div v-else>No stores with these filters were found</div>
         <div v-if="pagination.total_pages > 1" class="pagination">
           <a class="pagination__button pagination__button--prev-page" href="#" @click.prevent="prevPage">
             <img src="~assets/svg/icon-arrow-left.svg" alt="previous page" />

@@ -124,77 +124,7 @@
         @apply lg:grid-cols-4 mb-12;
         @apply xl:grid-cols-5;
 
-        &__single {
-            &.europe {
-                .store-snippet {
-                    @apply border-2 border-orange;
-                    &__country { @apply bg-orange; }
-                }
-            }
-
-            &.asia {
-                .store-snippet {
-                    @apply border-2 border-pink;
-                    &__country { @apply bg-pink; }
-                }
-            }
-
-            &.oceania {
-                .store-snippet {
-                    @apply border-2 border-purple;
-                    &__country { @apply bg-purple; }
-                }
-            }
-
-            &.north-america {
-                .store-snippet {
-                    @apply border-2 border-cyan;
-                    &__country { @apply bg-cyan; }
-                }
-            }
-
-            &.south-america {
-                .store-snippet {
-                    @apply border-2 border-green;
-                    &__country { @apply bg-green; }
-                }
-            }
-
-            &.africa {
-                .store-snippet {
-                    @apply border-2 border-red;
-                    &__country { @apply bg-red; }
-                }
-            }
-
-            .store-snippet {
-                @apply rounded-br-lg rounded-tl-lg p-10 relative h-full;
-
-                &__country {
-                    @apply absolute top-0 left-0 rounded-br-lg px-4 py-1 tracking-wide uppercase font-medium text-black text-xs;
-                }
-
-                &__image-wrapper {
-                    width: 80%;
-                    height: 50px;
-                    @apply m-auto flex justify-center items-center mb-10;
-                    img {
-                        max-width:100%;
-                        max-height:100%;
-                    }
-                }
-                &__title {
-                    @apply text-center mb-6 !important;
-                }
-
-                &__products {
-                    @apply flex flex-wrap justify-center gap-3;
-                    span {
-                        @apply tracking-wide uppercase px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray;
-                    }
-                }
-            }
-        }
+        
     }
 
     .pagination {
