@@ -122,7 +122,8 @@ function nextPage() {
 
     /*create querystring*/
     const queryString = createQueryString({
-      page: pagination.value.current_page
+      page: pagination.value.current_page,
+      country: activeFilters.countries[0] ?? ''
     })
 
     /*create paramstring from active filters for url*/
@@ -146,7 +147,8 @@ function prevPage() {
 
     /*create querystring*/
     const queryString = createQueryString({
-      page: pagination.value.current_page
+      page: pagination.value.current_page,
+      country: activeFilters.countries[0] ?? ''
     })
 
     /*create paramstring from active filters for url*/
