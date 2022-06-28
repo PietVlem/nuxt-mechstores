@@ -39,6 +39,14 @@ function toggleFilter(type, value) {
   storeFilter(type, value)
 }
 
+function toggleDropdown(dropdown) {
+        if (activeDropDown.value) {
+            activeDropDown.value !== dropdown ? activeDropDown.value = dropdown : activeDropDown.value = null
+        } else {
+            activeDropDown.value = dropdown
+        }
+    }
+
 onMounted(async () => {
   /*init splitbee*/
   splitbeeInit()
