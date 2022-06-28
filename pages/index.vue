@@ -23,8 +23,6 @@ const {
   getFilters,
   getMechStores,
   storeFilter,
-  nextPage,
-  prevPage,
   searchStores
 } = useMechstoresApi()
 
@@ -40,20 +38,20 @@ function toggleFilter(type, value) {
 }
 
 function toggleDropdown(dropdown) {
-        if (activeDropDown.value) {
-            activeDropDown.value !== dropdown ? activeDropDown.value = dropdown : activeDropDown.value = null
-        } else {
-            activeDropDown.value = dropdown
-        }
-    }
+  if (activeDropDown.value) {
+    activeDropDown.value !== dropdown ? activeDropDown.value = dropdown : activeDropDown.value = null
+  } else {
+    activeDropDown.value = dropdown
+  }
+}
 
 onMounted(async () => {
   /*init splitbee*/
   splitbeeInit()
 
   /*get data*/
-  getFilters()
-  getMechStores()
+  await getFilters()
+  await getMechStores()
 })
 </script>
 
@@ -132,15 +130,7 @@ onMounted(async () => {
           <Card v-for="store in mechstores" :key="store.id" @click="SplitbeeEvent(store.title)" :store="store" />
         </div>
         <div v-else>No stores with these filters were found</div>
-        <div v-if="pagination.total_pages > 1" class="pagination">
-          <a class="pagination__button pagination__button--prev-page" href="#" @click.prevent="prevPage">
-            <img src="~assets/svg/icon-arrow-left.svg" alt="previous page" />
-          </a>
-          <span class="pagination__pages">{{ pagination.current_page }}/{{ pagination.total_pages }}</span>
-          <a class="pagination__button pagination__button--next-page" href="#" @click.prevent="nextPage">
-            <img src="~assets/svg/icon-arrow-right.svg" alt="next page" />
-          </a>
-        </div>
+        <Pagination v-if="pagination.total_pages > 1"/>
       </div>
     </section>
   </div>

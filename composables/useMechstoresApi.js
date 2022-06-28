@@ -1,6 +1,7 @@
 import axios from "axios"
 
 export default function useMechstoresApi() {
+    /*Variables*/
     const config = useRuntimeConfig()
     const baseApiUrl = `${config.MINDSWEEP_API_BASEURL}/api/v2/mechstores.json`
     const filterObject = {
@@ -113,7 +114,6 @@ export default function useMechstoresApi() {
 
             /*Get filter parameters*/
             for (const [type, value] of urlParams) {
-                console.log(type, value)
                 switch (type) {
                     case 'search':
                         search.value = value
@@ -213,6 +213,9 @@ export default function useMechstoresApi() {
 
             /*make api call*/
             makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
+
+            /*go back to the top of the page*/
+            window.scrollTo(0, 0)
         }
     }
 
@@ -235,6 +238,9 @@ export default function useMechstoresApi() {
 
             /*make api call*/
             makeStoresApiCall(`${baseApiUrl}${queryString}&${paramsQueryString}`)
+
+            /*go back to the top of the page*/
+            window.scrollTo(0, 0)
         }
     }
 
