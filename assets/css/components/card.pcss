@@ -1,68 +1,67 @@
 .card {
+    @apply relative dt-opacity;
+
     &.europe {
-        .store-snippet {
-            @apply border-2 border-orange;
-            &__country { @apply bg-orange; }
-        }
+        .card__country { @apply bg-orange; }
+        .card__data { @apply border-2 border-orange;}
     }
 
     &.asia {
-        .store-snippet {
-            @apply border-2 border-pink;
-            &__country { @apply bg-pink; }
-        }
+        .card__country { @apply bg-pink; }
+        .card__data { @apply border-2 border-pink;}
     }
 
     &.oceania {
-        .store-snippet {
-            @apply border-2 border-purple;
-            &__country { @apply bg-purple; }
-        }
+        .card__country { @apply bg-purple; }
+        .card__data { @apply border-2 border-purple;}
     }
 
     &.north-america {
-        .store-snippet {
-            @apply border-2 border-cyan;
-            &__country { @apply bg-cyan; }
-        }
+        .card__country { @apply bg-cyan; }
+        .card__data { @apply border-2 border-cyan;}
     }
 
     &.south-america {
-        .store-snippet {
-            @apply border-2 border-green;
-            &__country { @apply bg-green; }
-        }
+        .card__country { @apply bg-green; }
+        .card__data { @apply border-2 border-green;}
     }
 
     &.africa {
-        .store-snippet {
-            @apply border-2 border-red;
-            &__country { @apply bg-red; }
-        }
+        .card__country { @apply bg-red; }
+        .card__data { @apply border-2 border-red;}
     }
 
-    .store-snippet {
-        @apply rounded-br-lg rounded-tl-lg p-10 relative h-full;
+    &__country {
+        @apply absolute top-0 left-0 rounded-br-lg rounded-tl-lg px-4 py-1 tracking-wide uppercase font-medium text-black text-xs;
+    }
 
-        &__country {
-            @apply absolute top-0 left-0 rounded-br-lg px-4 py-1 tracking-wide uppercase font-medium text-black text-xs;
-        }
+    .card__data {
+        @apply rounded-br-lg rounded-tl-lg p-6 relative h-full grid grid-cols-6 gap-6;
+        @apply md:p-10 md:flex-col md:gap-10;
 
-        &__image-wrapper {
-            @apply m-auto flex justify-center items-center mb-10 w-4/5 h-[50px];
+        .image-wrapper {
+            @apply m-auto flex justify-center items-center col-span-2 h-8;
+            @apply h-[50px] md:col-start-2 md:col-span-4;
             img {
                 @apply max-w-full max-h-full;
             }
         }
-        &__title {
-            @apply text-center mb-6 !important;
-        }
 
-        &__products {
-            @apply flex flex-wrap justify-center gap-3;
-            span {
-                @apply tracking-wide uppercase px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray;
+        .text {
+            @apply col-span-4 flex flex-col gap-2;
+            @apply md:gap-2 md:col-span-6;
+            &__title {
+                @apply md:text-center;
+            }
+    
+            &__products {
+                @apply flex flex-wrap gap-3;
+                @apply md:justify-center;
+                span {
+                    @apply tracking-wide uppercase px-4 py-1 border-2 font-medium border-gray rounded-full text-xs text-gray;
+                }
             }
         }
+        
     }
 }

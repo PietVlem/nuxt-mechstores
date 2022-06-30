@@ -17,6 +17,9 @@ useHead({
     { property: 'og:description', content: 'Overview of websites from all over the world where you can buy parts for your mechanical keyboard.' },
     { property: 'og:type', content: 'website' },
     { property: 'og:url', content: 'https://mechstores.mindsweep.be' },
+    { property: 'og:image', content: '~assets/images/img-og-img.png' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
     { name: 'robots', content: 'index,follow' }
   ]
 })

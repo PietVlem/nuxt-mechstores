@@ -29,6 +29,7 @@ const {
 /*Declaire vars*/
 const activeDropDown = ref('null')
 
+/*Methods*/
 function toggleFilter(type, value) {
   /*close dropdown*/
   activeDropDown.value = null
@@ -43,6 +44,17 @@ function toggleDropdown(dropdown) {
   } else {
     activeDropDown.value = dropdown
   }
+}
+
+function focusCard(e) {
+  const allCards = document.querySelectorAll('.card')
+  allCards.forEach(card => card.style.opacity = "50%")
+  e.target.style.opacity = "100%"
+}
+
+function removeFocus() {
+  const allCards = document.querySelectorAll('.card')
+  allCards.forEach(card => card.style.opacity = "100%")
 }
 
 onMounted(async () => {
@@ -127,10 +139,11 @@ onMounted(async () => {
           </button>
         </div>
         <div v-if="mechstores.length" class="stores">
-          <Card v-for="store in mechstores" :key="store.id" @click="SplitbeeEvent(store.title)" :store="store" />
+          <Card v-for="store in mechstores" :key="store.id" @click="SplitbeeEvent(store.title)" :store="store"
+            @mouseenter="focusCard" @mouseleave="removeFocus" />
         </div>
         <div v-else>No stores with these filters were found</div>
-        <Pagination v-if="pagination.total_pages > 1"/>
+        <Pagination v-if="pagination.total_pages > 1" />
       </div>
     </section>
   </div>
